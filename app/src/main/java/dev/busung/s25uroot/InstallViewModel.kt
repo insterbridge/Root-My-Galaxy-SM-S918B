@@ -671,11 +671,20 @@ class InstallViewModel(application: Application) : AndroidViewModel(application)
 
     private fun removeRootFiles(helperSource: File) {
         val helper = helperFile(helperSource)
+        // Surgical cleanup: remove exactly the files this app stages, plus the
+        // su socket and optional BOPE trace file it may create. The previous
+        // implementation wiped every top-level entry of /data/local/tmp,
+        // destroying unrelated user data (classic-KSU artifacts, chroots,
+        // scripts). /data/adb/modules is intentionally left untouched: the
+        // late-load flow never writes there and it may belong to another
+        // root manager.
         val cleanup =
-            "for target in /data/local/tmp /data/adb/modules; do " +
-                "[ -d \"\$target\" ] || continue; " +
-                "find \"\$target\" -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +; " +
-                "done; rm -f -- /data/adb/ksud"
+            "for target in $SHIZUKU_HELPER_PATH $SHIZUKU_PAYLOAD_PATH " +
+                "$SHIZUKU_LAUNCHER_PATH $SHIZUKU_MM_FACTORY_PATH " +
+                "$SHIZUKU_KSUD_PATH $SHIZUKU_KSUD_STAGE_PATH " +
+                "/data/local/tmp/ksud-selected /data/local/tmp/temp_su.sock " +
+                "/data/local/tmp/rmg-trace.txt; do " +
+                "rm -rf -- \"\$target\"; done; rm -rf -- /data/adb/ksud"
         val result = runHelper(helper, "-c", cleanup)
         require(result.code == 0) {
             app.getString(R.string.error_uninstall_root, result.code, result.output)

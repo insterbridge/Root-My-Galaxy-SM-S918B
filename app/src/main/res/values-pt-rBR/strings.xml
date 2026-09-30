@@ -193,15 +193,6 @@
     <string name="artifact_exploit">exploit</string>
     <string name="artifact_kernelsu">KernelSU Next</string>
     <string name="repo_no_profile">Nenhum payload compatível suporta esse modelo e versão de kernel</string>
-    <string name="repo_downloading">Baixando %1$s</string>
-    <string name="repo_size_mismatch">O tamanho de %1$s não corresponde ao manifesto de suporte</string>
-    <string name="repo_size_exceeded">%1$s excedeu o tamanho declarado</string>
-    <string name="repo_incomplete">O download de %1$s está incompleto</string>
-    <string name="repo_finalize_failed">Não foi possível finalizar o arquivo %1$s</string>
-    <string name="repo_verified">%1$s verificado</string>
-    <string name="repo_commit_invalid">O GitHub retornou um SHA de commit inválido</string>
-    <string name="repo_url_invalid">O repositório de artefatos não é permitido</string>
-    <string name="repo_response_too_large">A resposta excedeu seu limite de tamanho</string>
     <string name="open_github">Abrir GitHub</string>
     <string name="github_card_title">Explorar o Root My Galaxy</string>
     <string name="github_card_description">Ver o código-fonte e instruções de uso.</string>
@@ -210,7 +201,6 @@
     <string name="advanced">Avançado</string>
     <string name="advanced_mode">Modo avançado</string>
     <string name="advanced_mode_description">Exibe o seletor e permite executar manualmente qualquer target incluído no app</string>
-    <string name="repo_profile_missing">O perfil de suporte %1$s não está mais disponível</string>
     <string name="select_device_title">Escolha um payload</string>
     <string name="select_device_description">Selecione um payload por modelo de dispositivo e versão de kernel.</string>
     <string name="show_my_device_only">Mostrar apenas meu dispositivo</string>
@@ -243,16 +233,6 @@
     <string name="export_log">Exportar log</string>
     <string name="export_log_saved">Log salvo</string>
     <string name="export_log_failed">Falha ao salvar o log</string>
-    <string name="updater_available_title">Uma atualização está disponível</string>
-    <string name="updater_available_body">A versão %1$s está disponível</string>
-    <string name="updater_available_body_short">%1$s está disponível</string>
-    <string name="updater_button_download">Baixar e instalar</string>
-    <string name="updater_downloading">Baixando…</string>
-    <string name="updater_download_failed">Falha no download</string>
-    <string name="updater_check">Verificar atualizações</string>
-    <string name="updater_checking">Verificando atualizações…</string>
-    <string name="updater_up_to_date">Você está atualizado</string>
-    <string name="updater_failed">Falha ao verificar atualizações</string>
     <string name="history_select_all">Selecionar tudo</string>
     <string name="history_clear_selection">Limpar seleção</string>
     <string name="history_delete_selected">Excluir (%1$d)</string>
@@ -265,4 +245,5 @@
         <item quantity="other">Estas execuções e seus logs serão removidos permanentemente.</item>
     </plurals>
     <string name="history_delete">Excluir</string>
+    <string name="repo_profile_missing">O perfil de suporte %1$s não está mais disponível</string>
 </resources>

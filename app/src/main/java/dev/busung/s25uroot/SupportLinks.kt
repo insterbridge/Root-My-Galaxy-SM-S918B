@@ -12,6 +12,9 @@ import androidx.compose.ui.text.withStyle
 internal const val PROJECT_ISSUES_URL =
     "https://github.com/soumarcelino/Root-My-Galaxy-SM-S918B/issues"
 
+internal const val PROJECT_REPOSITORY_URL =
+    "https://github.com/soumarcelino/Root-My-Galaxy-SM-S918B"
+
 internal fun openProjectIssues(context: Context) {
     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(PROJECT_ISSUES_URL)))
 }

@@ -99,15 +99,6 @@
     <string name="artifact_exploit">exploit</string>
     <string name="artifact_kernelsu">KernelSU</string>
     <string name="repo_no_profile">Aucune charge utile compatible ne prend en charge ce modèle et cette version de noyau</string>
-    <string name="repo_downloading">Téléchargement de %1$s</string>
-    <string name="repo_size_mismatch">La taille de %1$s ne correspond pas au manifeste de compatibilité</string>
-    <string name="repo_size_exceeded">%1$s a dépassé la taille déclarée</string>
-    <string name="repo_incomplete">Le téléchargement de %1$s est incomplet</string>
-    <string name="repo_finalize_failed">Impossible de finaliser le fichier %1$s</string>
-    <string name="repo_verified">%1$s vérifié</string>
-    <string name="repo_commit_invalid">GitHub a renvoyé un SHA de commit invalide</string>
-    <string name="repo_url_invalid">Le dépôt d\'artefacts n\'est pas autorisé</string>
-    <string name="repo_response_too_large">La réponse a dépassé sa limite de taille</string>
     <string name="open_github">Ouvrir GitHub</string>
     <string name="github_card_title">Explorer Root My Galaxy</string>
     <string name="github_card_description">Voir le code source et les instructions d\'utilisation.</string>
@@ -126,7 +117,6 @@
     <string name="error_shizuku_stage">Impossible de préparer %1$s via Shizuku : %2$s</string>
     <string name="log_shizuku_prepare">[*] Préparation de l\'exécution Shizuku</string>
     <string name="log_shizuku_permission">[+] Permission Shizuku accordée</string>
-    <string name="repo_profile_missing">Le profil de compatibilité %1$s n\'est plus disponible</string>
     <string name="select_device_title">Choisir une charge utile</string>
     <string name="select_device_description">Sélectionner une charge utile par modèle d\'appareil et version de noyau.</string>
     <string name="show_my_device_only">Afficher uniquement mon appareil</string>
@@ -148,16 +138,6 @@
     <string name="kernelsu_card_description">Une solution root basée sur le noyau pour Android</string>
     <string name="history_shizuku_used">Shizuku utilisé</string>
     <string name="history_shizuku_not_used">Shizuku non utilisé</string>
-    <string name="updater_available_title">Une mise à jour est disponible</string>
-    <string name="updater_available_body">La version %1$s est disponible</string>
-    <string name="updater_button_download">Télécharger et installer</string>
-    <string name="updater_downloading">Téléchargement…</string>
-    <string name="updater_download_failed">Échec du téléchargement</string>
-    <string name="updater_check">Vérifier les mises à jour</string>
-    <string name="updater_checking">Vérification des mises à jour…</string>
-    <string name="updater_up_to_date">Vous êtes à jour</string>
-    <string name="updater_failed">Échec de la vérification des mises à jour</string>
-    <string name="updater_available_body_short">%1$s est disponible</string>
     <string name="history_select_all">Tout sélectionner</string>
     <string name="history_clear_selection">Effacer la sélection</string>
     <string name="history_delete_selected">Supprimer (%1$d)</string>
@@ -170,4 +150,5 @@
         <item quantity="other">Ces exécutions et leurs journaux seront définitivement supprimés.</item>
     </plurals>
     <string name="history_delete">Supprimer</string>
+    <string name="repo_profile_missing">Le profil de compatibilité %1$s n\'est plus disponible</string>
 </resources>

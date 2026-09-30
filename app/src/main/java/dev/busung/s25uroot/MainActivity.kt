@@ -3,12 +3,12 @@ package dev.busung.s25uroot
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import android.os.Build
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -82,7 +82,6 @@ import androidx.compose.material.icons.rounded.Memory
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.Security
 import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material.icons.rounded.SystemUpdate
 import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.VerifiedUser
@@ -311,41 +310,6 @@ private fun RootApp(
     } else {
         installState
     }
-    var updateStatus by remember { mutableStateOf<UpdateStatus>(UpdateStatus.Idle) }
-    var updateCardDismissed by remember { mutableStateOf(false) }
-    val checkForUpdate: () -> Unit = {
-        if (!updateStatus.busy) {
-            updateStatus = UpdateStatus.Checking
-            scope.launch {
-                val info = AppUpdater.fetchLatestRelease()
-                updateStatus = when {
-                    info == null -> UpdateStatus.Failed
-                    AppUpdater.isUpdateAvailable(info.versionName, BuildConfig.VERSION_NAME) ->
-                        UpdateStatus.Available(info)
-                    else -> UpdateStatus.UpToDate
-                }
-            }
-        }
-    }
-    val startDownload: (UpdateInfo) -> Unit = { info ->
-        val apkUrl = info.apkUrl
-        if (apkUrl == null) {
-            AppUpdater.openReleasesPage(context)
-        } else {
-            updateStatus = UpdateStatus.Downloading(info, 0f)
-            scope.launch {
-                val apk = AppUpdater.downloadApk(context, apkUrl) { progress ->
-                    updateStatus = UpdateStatus.Downloading(info, progress)
-                }
-                if (apk == null || !AppUpdater.installApk(context, apk)) {
-                    Toast.makeText(context, context.getString(R.string.updater_download_failed), Toast.LENGTH_SHORT).show()
-                    AppUpdater.openReleasesPage(context)
-                }
-                updateStatus = UpdateStatus.Available(info)
-            }
-        }
-    }
-    LaunchedEffect(Unit) { checkForUpdate() }
 
     if (showTargetPicker) {
         TargetSelectionSheet(
@@ -491,10 +455,6 @@ private fun RootApp(
                     padding = padding,
                     device = device,
                     installState = overviewInstallState,
-                    updateStatus = updateStatus,
-                    updateCardDismissed = updateCardDismissed,
-                    onDismissUpdateCard = { updateCardDismissed = true },
-                    onStartDownload = startDownload,
                     onInstall = {
                         selectedProfile = null
                         if (advancedMode) {
@@ -516,9 +476,6 @@ private fun RootApp(
                     themeMode = themeMode,
                     advancedMode = advancedMode,
                     optimizeOnExploit = optimizeOnExploit,
-                    updateStatus = updateStatus,
-                    onCheckForUpdate = checkForUpdate,
-                    onStartDownload = startDownload,
                     onAccentColorChanged = onAccentColorChanged,
                     onThemeModeChanged = onThemeModeChanged,
                     onAdvancedModeChanged = onAdvancedModeChanged,
@@ -567,10 +524,6 @@ private fun OverviewPage(
     padding: PaddingValues,
     device: DeviceSnapshot,
     installState: InstallUiState,
-    updateStatus: UpdateStatus,
-    updateCardDismissed: Boolean,
-    onDismissUpdateCard: () -> Unit,
-    onStartDownload: (UpdateInfo) -> Unit,
     onInstall: () -> Unit,
 ) {
     LazyColumn(
@@ -599,18 +552,6 @@ private fun OverviewPage(
                 AppVersionText(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.45f),
-                )
-            }
-        }
-        if (
-            !updateCardDismissed &&
-            updateStatus.info != null
-        ) {
-            item {
-                UpdateCard(
-                    status = updateStatus,
-                    onDismiss = onDismissUpdateCard,
-                    onStartDownload = onStartDownload,
                 )
             }
         }
@@ -657,104 +598,7 @@ private fun FirmwarePortHelpCard(title: String, message: String) {
     }
 }
 
-private sealed interface UpdateStatus {
-    data object Idle : UpdateStatus
-    data object Checking : UpdateStatus
-    data class Available(val info: UpdateInfo) : UpdateStatus
-    data class Downloading(val info: UpdateInfo, val progress: Float) : UpdateStatus
-    data object UpToDate : UpdateStatus
-    data object Failed : UpdateStatus
-}
 
-private val UpdateStatus.busy: Boolean
-    get() = this is UpdateStatus.Checking || this is UpdateStatus.Downloading
-
-private val UpdateStatus.info: UpdateInfo?
-    get() = when (this) {
-        is UpdateStatus.Available -> this.info
-        is UpdateStatus.Downloading -> this.info
-        else -> null
-    }
-
-@Composable
-private fun UpdateCard(
-    status: UpdateStatus,
-    onDismiss: () -> Unit,
-    onStartDownload: (UpdateInfo) -> Unit,
-) {
-    val view = LocalView.current
-    val info = status.info
-    if (info == null) return
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-        ),
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(18.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-            ) {
-                Icon(
-                    Icons.Rounded.SystemUpdate,
-                    contentDescription = null,
-                    modifier = Modifier.size(22.dp),
-                )
-                Text(
-                    text = stringResource(R.string.updater_available_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.weight(1f),
-                )
-                IconButton(
-                    onClick = {
-                        clickHaptic(view)
-                        onDismiss()
-                    },
-                    modifier = Modifier.size(24.dp),
-                ) {
-                    Icon(
-                        Icons.Rounded.Close,
-                        contentDescription = stringResource(R.string.action_close),
-                        modifier = Modifier.size(16.dp),
-                    )
-                }
-            }
-            Text(
-                text = stringResource(R.string.updater_available_body, info.versionName),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            when (status) {
-                is UpdateStatus.Downloading -> {
-                    LinearWavyProgressIndicator(
-                        progress = { status.progress },
-                        modifier = Modifier.fillMaxWidth(),
-                        color = LocalContentColor.current,
-                        trackColor = LocalContentColor.current.copy(alpha = 0.2f),
-                    )
-                    Text(
-                        text = stringResource(R.string.updater_downloading),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = LocalContentColor.current.copy(alpha = 0.78f),
-                    )
-                }
-                else -> {
-                    FilledTonalButton(onClick = {
-                        clickHaptic(view)
-                        onStartDownload(info)
-                    }) {
-                        Text(stringResource(R.string.updater_button_download))
-                    }
-                }
-            }
-        }
-    }
-}
 
 @Composable
 private fun HowItWorksCard() {
@@ -1453,9 +1297,6 @@ private fun SettingsPage(
     themeMode: AppThemeMode,
     advancedMode: Boolean,
     optimizeOnExploit: Boolean,
-    updateStatus: UpdateStatus,
-    onCheckForUpdate: () -> Unit,
-    onStartDownload: (UpdateInfo) -> Unit,
     onAccentColorChanged: (AccentColor) -> Unit,
     onThemeModeChanged: (AppThemeMode) -> Unit,
     onAdvancedModeChanged: (Boolean) -> Unit,
@@ -1614,18 +1455,12 @@ private fun SettingsPage(
         item { SectionLabel(stringResource(R.string.about)) }
         item {
             Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                UpdateSettingsCard(
-                    status = updateStatus,
-                    position = SettingsCardPosition.Top,
-                    onCheckForUpdate = onCheckForUpdate,
-                    onStartDownload = onStartDownload,
-                )
                 SettingsCard(
                     icon = Icons.Rounded.Info,
                     title = stringResource(R.string.about),
                     description = stringResource(R.string.about_description),
                     value = "",
-                    position = SettingsCardPosition.Bottom,
+                    position = SettingsCardPosition.Top,
                     onClick = {
                         clickHaptic(view)
                         showAboutDialog = true
@@ -1648,84 +1483,6 @@ private fun SettingsPage(
     }
 }
 
-@Composable
-private fun UpdateSettingsCard(
-    status: UpdateStatus,
-    position: SettingsCardPosition,
-    onCheckForUpdate: () -> Unit,
-    onStartDownload: (UpdateInfo) -> Unit,
-) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val view = LocalView.current
-    val busy = status.busy
-    Card(
-        onClick = {
-            clickHaptic(view)
-            when {
-                busy -> Unit
-                status is UpdateStatus.Available -> onStartDownload(status.info)
-                else -> onCheckForUpdate()
-            }
-        },
-        modifier = Modifier.fillMaxWidth(),
-        shape = expressiveClickableCardShape(interactionSource, position),
-        interactionSource = interactionSource,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-        ),
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 15.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            when {
-                status is UpdateStatus.Checking -> LoadingIndicator(modifier = Modifier.size(28.dp))
-                status is UpdateStatus.Downloading -> LoadingIndicator(
-                    modifier = Modifier.size(28.dp),
-                )
-                else -> Icon(
-                    Icons.Rounded.SystemUpdate,
-                    contentDescription = null,
-                    modifier = Modifier.size(28.dp),
-                )
-            }
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = when (status) {
-                        is UpdateStatus.Available, is UpdateStatus.Downloading ->
-                            stringResource(R.string.updater_available_title)
-                        else -> stringResource(R.string.updater_check)
-                    },
-                    style = MaterialTheme.typography.titleMedium,
-                )
-                Text(
-                    text = when {
-                        status is UpdateStatus.Downloading -> stringResource(R.string.updater_downloading)
-                        status is UpdateStatus.Checking -> stringResource(R.string.updater_checking)
-                        status is UpdateStatus.Available ->
-                            stringResource(R.string.updater_available_body_short, status.info.versionName)
-                        status is UpdateStatus.UpToDate -> stringResource(R.string.updater_up_to_date)
-                        status is UpdateStatus.Failed -> stringResource(R.string.updater_failed)
-                        else -> ""
-                    },
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-            if (status is UpdateStatus.Available) {
-                Text(
-                    text = stringResource(R.string.updater_button_download),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    maxLines = 1,
-                )
-            }
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -2097,7 +1854,7 @@ private fun AboutDialog(onDismiss: () -> Unit) {
                 Surface(
                     onClick = {
                         clickHaptic(view)
-                        uriHandler.openUri(ROOT_MY_GALAXY_URL)
+                        uriHandler.openUri(PROJECT_REPOSITORY_URL)
                     },
                     color = Color.Transparent,
                     shape = MaterialTheme.shapes.medium,

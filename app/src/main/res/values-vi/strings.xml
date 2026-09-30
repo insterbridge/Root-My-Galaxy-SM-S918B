@@ -93,15 +93,6 @@
     <string name="artifact_exploit">exploit</string>
     <string name="artifact_kernelsu">KernelSU</string>
     <string name="repo_no_profile">Không có payload tương thích nào hỗ trợ mẫu và phiên bản kernel này</string>
-    <string name="repo_downloading">Đang tải %1$s</string>
-    <string name="repo_size_mismatch">Kích thước %1$s không khớp với manifest hỗ trợ</string>
-    <string name="repo_size_exceeded">%1$s vượt quá kích thước khai báo</string>
-    <string name="repo_incomplete">Tải %1$s chưa hoàn tất</string>
-    <string name="repo_finalize_failed">Không thể hoàn tất tệp %1$s</string>
-    <string name="repo_verified">%1$s đã được xác minh</string>
-    <string name="repo_commit_invalid">GitHub trả về commit SHA không hợp lệ</string>
-    <string name="repo_url_invalid">Kho artifact không được phép</string>
-    <string name="repo_response_too_large">Phản hồi vượt quá giới hạn kích thước</string>
     <string name="open_github">Mở GitHub</string>
     <string name="github_card_title">Khám phá Root My Galaxy</string>
     <string name="github_card_description">Xem mã nguồn và hướng dẫn sử dụng.</string>
@@ -120,7 +111,6 @@
     <string name="error_shizuku_stage">Không thể chuẩn bị %1$s qua Shizuku: %2$s</string>
     <string name="log_shizuku_prepare">[*] Đang chuẩn bị thực thi Shizuku</string>
     <string name="log_shizuku_permission">[+] Đã cấp quyền Shizuku</string>
-    <string name="repo_profile_missing">Hồ sơ hỗ trợ %1$s không còn khả dụng</string>
     <string name="select_device_title">Chọn payload</string>
     <string name="select_device_description">Chọn payload theo mẫu thiết bị và phiên bản kernel.</string>
     <string name="show_my_device_only">Chỉ hiển thị thiết bị của tôi</string>
@@ -142,16 +132,6 @@
     <string name="kernelsu_card_description">Giải pháp root dựa trên kernel cho Android</string>
     <string name="history_shizuku_used">Đã dùng Shizuku</string>
     <string name="history_shizuku_not_used">Không dùng Shizuku</string>
-    <string name="updater_available_title">Có bản cập nhật mới</string>
-    <string name="updater_available_body">Phiên bản %1$s hiện có sẵn</string>
-    <string name="updater_button_download">Tải xuống và cài đặt</string>
-    <string name="updater_downloading">Đang tải xuống…</string>
-    <string name="updater_download_failed">Tải xuống thất bại</string>
-    <string name="updater_check">Kiểm tra cập nhật</string>
-    <string name="updater_checking">Đang kiểm tra cập nhật…</string>
-    <string name="updater_up_to_date">Bạn đang dùng bản mới nhất</string>
-    <string name="updater_failed">Không thể kiểm tra cập nhật</string>
-    <string name="updater_available_body_short">%1$s có sẵn</string>
     <string name="history_select_all">Chọn tất cả</string>
     <string name="history_clear_selection">Bỏ chọn</string>
     <string name="history_delete_selected">Xóa (%1$d)</string>
@@ -164,4 +144,5 @@
         <item quantity="other">Các lần chạy này và nhật ký của chúng sẽ bị xóa vĩnh viễn.</item>
     </plurals>
     <string name="history_delete">Xóa</string>
+    <string name="repo_profile_missing">Hồ sơ hỗ trợ %1$s không còn khả dụng</string>
 </resources>

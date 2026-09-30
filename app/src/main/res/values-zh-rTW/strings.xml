@@ -106,15 +106,6 @@
     <string name="artifact_kernelsu">KernelSU</string>
 
     <string name="repo_no_profile">沒有支援此型號與核心版本的相容 payload</string>
-    <string name="repo_downloading">正在下載 %1$s</string>
-    <string name="repo_size_mismatch">%1$s 大小與支援清單不符</string>
-    <string name="repo_size_exceeded">%1$s 超出聲明的大小</string>
-    <string name="repo_incomplete">%1$s 下載不完整</string>
-    <string name="repo_finalize_failed">無法完成 %1$s 檔案</string>
-    <string name="repo_verified">%1$s 已驗證</string>
-    <string name="repo_commit_invalid">GitHub 傳回的 commit SHA 無效</string>
-    <string name="repo_url_invalid">不允許的 artifact 儲存庫</string>
-    <string name="repo_response_too_large">回應超過大小限制</string>
 
     <string name="open_github">開啟 GitHub</string>
     <string name="github_card_title">探索 Root My Galaxy</string>
@@ -137,7 +128,6 @@
     <string name="log_shizuku_prepare">[*] 正在準備 Shizuku 執行</string>
     <string name="log_shizuku_permission">[+] 已授予 Shizuku 權限</string>
 
-    <string name="repo_profile_missing">支援設定檔 %1$s 已無法使用</string>
 
     <string name="select_device_title">選擇 payload</string>
     <string name="select_device_description">依裝置型號與核心版本選擇 payload。</string>
@@ -162,16 +152,6 @@
     <string name="kernelsu_card_description">以核心為基礎的 Android Root 解決方案</string>
     <string name="history_shizuku_used">已使用 Shizuku</string>
     <string name="history_shizuku_not_used">未使用 Shizuku</string>
-    <string name="updater_available_title">有可用更新</string>
-    <string name="updater_available_body">新版本 %1$s 可用</string>
-    <string name="updater_button_download">下載並安裝</string>
-    <string name="updater_downloading">下載中…</string>
-    <string name="updater_download_failed">下載失敗</string>
-    <string name="updater_check">檢查更新</string>
-    <string name="updater_checking">正在檢查更新…</string>
-    <string name="updater_up_to_date">已是最新版本</string>
-    <string name="updater_failed">檢查更新失敗</string>
-    <string name="updater_available_body_short">%1$s 可用</string>
     <string name="history_select_all">全選</string>
     <string name="history_clear_selection">清除選擇</string>
     <string name="history_delete_selected">刪除 (%1$d)</string>
@@ -184,4 +164,5 @@
         <item quantity="other">這些執行紀錄及其日誌將被永久刪除。</item>
     </plurals>
     <string name="history_delete">刪除</string>
+    <string name="repo_profile_missing">支援設定檔 %1$s 已無法使用</string>
 </resources>
